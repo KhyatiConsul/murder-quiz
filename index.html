@@ -8,43 +8,106 @@
 <body>
   <div class="container">
     <h1>If You Were the Killer…</h1>
-    <p class="intro">Want to know what kind of mastermind you are?<br><span class="whisper">(Don’t think too hard. That’s part of the test.)</span></p>
+    <p class="intro">Want to know what kind of mastermind you are?<br><span class="whisper">(Don’t think too hard. Answer honestly. The shadows are listening.)</span></p>
 
     <form id="quizForm">
-      <div class="question">
-        <label>1. Why did you kill?</label><br>
-        <select name="motive" required>
-          <option value ="" disabled selected hidden>Choose from the options</option>
-          <option value="abandonment">They reminded me of someone who left.</option>
-          <option value="boundary">They crossed a boundary I never voiced.</option>
-          <option value="envy">They were everything I couldn’t be.</option>
-          <option value="identity">They saw a version of me I wasn’t ready to be.</option>
-        </select>
+      <!--SECTION1: MOTIVE-->
+      <div class="name-row">
+        <label for="name">Enter your name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <br>
+      <div class="section" id="section-1">
+        <div class="question">
+          <label>1. Why did you kill?</label><br>
+          <select name="motive" required>
+            <option value="" disabled selected hidden>Choose from the options</option>
+            <option value="abandonment">They reminded me of someone who left.</option>
+            <option value="boundary">They crossed a boundary I never voiced.</option>
+            <option value="envy">They were everything I couldn’t be.</option>
+            <option value="identity">They saw a version of me I wasn’t ready to be.</option>
+          </select>
+        </div>
+        <button type="button" onclick="nextSection(1)">Next</button>
       </div>
 
-      <div class="question">
-        <label>2. What did you use?</label><br>
-        <select name="weapon">
-          <option value ="" disabled selected hidden>Choose from the options</option>
-          <option value="poison">Poison – quiet and irreversible</option>
-          <option value="knife">Knife – intimate, messy</option>
-          <option value="gun">Gun – fast, detached</option>
-          <option value="hands">Hands – pure instinct</option>
-        </select>
+      <!-- SECTION 2: METHOD -->
+      <div class="section hidden" id="section-2">
+        <div class="question">
+          <label>2. When did you kill them?</label><br>
+          <select name="timing" required>
+            <option value="" disabled selected hidden>Choose from the options</option>
+            <option value="planned">After watching them closely for weeks</option>
+            <option value="snapped">One night – it just snapped</option>
+            <option value="conversation">During a seemingly normal conversation</option>
+            <option value="public">In public, but quiet enough no one noticed</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <label>3. Pick your weapon.</label><br>
+          <select name="weapon" required>
+            <option value="" disabled selected hidden>Choose from the options</option>
+            <option value="poison">Poison – subtle, slow</option>
+            <option value="knife">Knife – personal, direct</option>
+            <option value="gun">Gun – clean, fast</option>
+            <option value="hands">Hands – primal, no filter</option>
+          </select>
+        </div>
+        <button type="button" onclick="nextSection(2)">Next</button>
       </div>
 
-      <div class="question">
-        <label>3. What did you feel afterward?</label><br>
-        <select name="emotion">
-          <option value ="" disabled selected hidden>Choose from the options</option>
-          <option value="relief">Relief</option>
-          <option value="disgust">Disgust</option>
-          <option value="nothing">Nothing</option>
-          <option value="power">Power</option>
-        </select>
+      <!-- SECTION 3: PSYCHE -->
+      <div class="section hidden" id="section-3">
+        <div class="question">
+          <label>4. Right after it was over, you felt:</label><br>
+          <select name="emotion" required>
+            <option value="" disabled selected hidden>Choose from the options</option>
+            <option value="relief">Relief</option>
+            <option value="disgust">Disgust at yourself</option>
+            <option value="nothing">Nothing</option>
+            <option value="power">A weird kind of power</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <label>5. What did you hear in your head right after?</label><br>
+          <select name="echo" required>
+            <option value="" disabled selected hidden>Choose from the options</option>
+            <option value="silence">Nothing – absolute silence</option>
+            <option value="laughter">Their laughter still echoing</option>
+            <option value="heartbeat">Your own heartbeat</option>
+            <option value="screams">A scream you weren't sure was yours</option>
+          </select>
+        </div>
+        <button type="button" onclick="nextSection(3)">Next</button>
       </div>
 
-      <button type="submit">Reveal Your Name</button>
+      <!-- SECTION 4: COVER-UP -->
+      <div class="section hidden" id="section-4">
+        <div class="question">
+          <label>6. What did you do with the body?</label><br>
+          <select name="body" required>
+            <option value="" disabled selected hidden>Choose from the options</option>
+            <option value="buried">Buried it somewhere symbolic</option>
+            <option value="burned">Burned it all, no trace</option>
+            <option value="message">Left it where it fell – let it be a message</option>
+            <option value="hidden">Hid it in plain sight</option>
+          </select>
+        </div>
+
+        <div class="question">
+          <label>7. Who did you text after it happened?</label><br>
+          <select name="texted" required>
+            <option value="" disabled selected hidden>Choose from the options</option>
+            <option value="noone">No one</option>
+            <option value="normal">Someone unrelated, just to feel normal</option>
+            <option value="victim">The victim’s contact – for the thrill</option>
+            <option value="burner">A burner account you created years ago</option>
+          </select>
+        </div>
+        <button type="submit">Reveal Your Name</button>
+      </div>
     </form>
 
     <div id="result" class="result hidden"></div>

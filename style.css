@@ -61,3 +61,26 @@ select {
   border: 1px solid #555;
   border-radius: 4px;
 }
+
+input[type="text"] {
+  background-color: #2b0f14; /* deep wine background */
+  color: #f5e5e7;             /* soft pink-white text */
+  border: 1px solid #5c1f2e;  /* subtle border */
+  padding: 10px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 100%;
+  box-shadow: 0 0 5px rgba(92, 31, 46, 0.5);
+  transition: all 0.2s ease;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #aa4d6a; /* wine-pink highlight */
+  box-shadow: 0 0 8px rgba(170, 77, 106, 0.6);
+}
+
+input[type="text"]::placeholder {
+  color: #bfa3aa;
+}
