@@ -13,7 +13,8 @@
     <form id="quizForm">
       <div class="question">
         <label>1. Why did you kill?</label><br>
-        <select name="motive">
+        <select name="motive" required>
+          <option value ="" disabled selected hidden>Choose from the options</option>
           <option value="abandonment">They reminded me of someone who left.</option>
           <option value="boundary">They crossed a boundary I never voiced.</option>
           <option value="envy">They were everything I couldn’t be.</option>
@@ -24,6 +25,7 @@
       <div class="question">
         <label>2. What did you use?</label><br>
         <select name="weapon">
+          <option value ="" disabled selected hidden>Choose from the options</option>
           <option value="poison">Poison – quiet and irreversible</option>
           <option value="knife">Knife – intimate, messy</option>
           <option value="gun">Gun – fast, detached</option>
@@ -34,6 +36,7 @@
       <div class="question">
         <label>3. What did you feel afterward?</label><br>
         <select name="emotion">
+          <option value ="" disabled selected hidden>Choose from the options</option>
           <option value="relief">Relief</option>
           <option value="disgust">Disgust</option>
           <option value="nothing">Nothing</option>
