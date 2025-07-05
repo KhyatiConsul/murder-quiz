@@ -1,5 +1,24 @@
 from flask import Flask, request, jsonify, render_template
 import json
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+def append_to_sheet(data):
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("murderquiz-1302ec054db0.json", scope)
+    client = gspread.authorize(creds)
+
+    sheet = client.open("quiz_responses").sheet1
+
+    row = [
+        data.get("name", ""),
+        data.get("raw_answers", {}).get("city", ""),
+        data.get("raw_answers", {}).get("birthyear", ""),
+        data.get("nickname", ""),
+        json.dumps(data.get("traits", {}))
+    ]
+
+    sheet.append_row(row)
 
 app = Flask(__name__)
 
@@ -18,6 +37,8 @@ def save_data():
 
     with open("quiz_data.json", "w") as file:
         json.dump(current_data, file, indent=2)
+
+    append_to_sheet(data)
 
     return jsonify({"status": "success"})
 
