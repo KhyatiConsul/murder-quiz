@@ -33,11 +33,13 @@ def view_data():
     password = request.args.get("pass")
     if password != "key2007":
         return Response("Unauthorized", status=401)
+    try:
+        with open("quiz_data.json", "r") as file:
+            data = json.load(file)
 
-    with open("quiz_data.json", "r") as file:
-        data = json.load(file)
-
-    return Response(
-        json.dumps(data, indent=2),
-        mimetype='application/json'
-    )
+        return Response(
+            json.dumps(data, indent=2),
+            mimetype='application/json'
+        )
+    except Exception as e:
+        return Response(f"Error reading data: {str(e)}", status = 500)
