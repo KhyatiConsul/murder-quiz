@@ -1,30 +1,22 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import json
-import os
 
 app = Flask(__name__)
-DATA_FILE = 'quiz_data.json'
 
-# Load existing data or create empty list
-if os.path.exists(DATA_FILE):
-    with open(DATA_FILE, 'r') as f:
-        all_profiles = json.load(f)
-else:
-    all_profiles = []
+@app.route("/")
+def index():
+    return render_template("index.html")
 
-@app.route('/save', methods=['POST'])
-def save_profile():
-    global all_profiles
+@app.route("/save", methods=["POST"])
+def save_data():
     data = request.get_json()
 
-    # Append new profile to the list
-    all_profiles.append(data)
+    with open("quiz_data.json", "r") as file:
+        current_data = json.load(file)
 
-    # Save back to JSON file
-    with open(DATA_FILE, 'w') as f:
-        json.dump(all_profiles, f, indent=2)
+    current_data.append(data)
 
-    return jsonify({"status": "success", "message": "Profile saved."})
+    with open("quiz_data.json", "w") as file:
+        json.dump(current_data, file, indent=2)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    return jsonify({"status": "success"})
