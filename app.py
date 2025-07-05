@@ -21,11 +21,6 @@ def save_data():
 
     return jsonify({"status": "success"})
 
-if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
-
 from flask import Response
 
 @app.route("/data")
@@ -43,3 +38,8 @@ def view_data():
         )
     except Exception as e:
         return Response(f"Error reading data: {str(e)}", status = 500)
+
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
