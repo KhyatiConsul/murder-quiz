@@ -30,15 +30,13 @@ from flask import Response
 
 @app.route("/data")
 def view_data():
-    # Simple password check (change this!)
     password = request.args.get("pass")
-    if password != "key2007":  # 👈 change this to a password only YOU know
+    if password != "key2007":
         return Response("Unauthorized", status=401)
 
     with open("quiz_data.json", "r") as file:
         data = json.load(file)
 
-    # Pretty-print JSON in browser
     return Response(
         json.dumps(data, indent=2),
         mimetype='application/json'
