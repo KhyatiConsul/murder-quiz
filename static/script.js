@@ -230,7 +230,7 @@ const profile = {
 };
 
   // Send to Flask backend
-  fetch("/save", {
+  fetch('/api/save', {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
