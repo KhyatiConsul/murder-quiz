@@ -19,6 +19,7 @@ At the end, you get your archetype — a psychological portrait built from your 
 ## The archetypes
 
 | Archetype | Core trait |
+
 | 🧊 The Surgical Ghost | Control through emotional absence |
 | 🩸 The Devourer in Disguise | Love as destruction |
 | 🕷️ The Silk-Wrapped Monster | Envy dressed as beauty |
