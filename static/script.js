@@ -73,28 +73,28 @@ form.addEventListener("submit", function (e) {
   if (texted === "victim") traits.obsession++;
   if (texted === "normal") traits.control++;
 
-  let result = "🔮 The Quiet God — You watch from shadows, pulling strings you never admit exist.";
+  let archetype = "🔮 The Quiet God — You watch from shadows, pulling strings you never admit exist.";
 
   if (traits.numb >= 3 && traits.control >= 2) {
-    result = "🧊 The Surgical Ghost — You don’t scream. You execute. You’re the absence of chaos, and that’s what terrifies them.";
+    archetype = "🧊 The Surgical Ghost — You don’t scream. You execute. You’re the absence of chaos, and that’s what terrifies them.";
   } else if (traits.grief >= 2 && traits.trauma >= 2) {
-    result = "🩸 The Devourer in Disguise — You touch to hold, but you destroy to feel.";
+    archetype = "🩸 The Devourer in Disguise — You touch to hold, but you destroy to feel.";
   } else if (traits.envy >= 2 && traits.rage >= 1) {
-    result = "🕷️ The Silk-Wrapped Monster — Beauty and pain wrapped in a single gesture.";
+    archetype = "🕷️ The Silk-Wrapped Monster — Beauty and pain wrapped in a single gesture.";
   } else if (traits.control >= 3 && traits.secrecy >= 2) {
-    result = "🔮 The Quiet God — You never speak your plans. You only let them unfold.";
+    archetype = "🔮 The Quiet God — You never speak your plans. You only let them unfold.";
   } else if (traits.obsession >= 1 && traits.rage >= 2) {
-    result = "🧨 The Lover Who Snapped — You couldn’t have them. So no one would.";
+    archetype = "🧨 The Lover Who Snapped — You couldn’t have them. So no one would.";
   } else if (traits.trauma >= 2 && traits.rage === 0 && traits.numb === 0) {
-    result = "🧬 The Wound-Mirror — You didn’t just kill them. You killed the echo of your past.";
+    archetype = "🧬 The Wound-Mirror — You didn’t just kill them. You killed the echo of your past.";
   } else if (traits.grief >= 2 && traits.rage === 0) {
-    result = "🔪 The Empathic Butcher — You felt it all too deeply. So you lit the memory on fire.";
+    archetype = "🔪 The Empathic Butcher — You felt it all too deeply. So you lit the memory on fire.";
   } else if (traits.chaos >= 3 && traits.rage >= 2) {
-    result = "🦴 The Ritual Breaker — Rules are cages. Your blood sings only in chaos.";
+    archetype = "🦴 The Ritual Breaker — Rules are cages. Your blood sings only in chaos.";
   } else if (traits.revenge >= 2 || (traits.rage >= 2 && traits.control >= 2)) {
-    result = "🦂 The Collector of Sins — Every pain they gave you... you returned in silence.";
+    archetype = "🦂 The Collector of Sins — Every pain they gave you... you returned in silence.";
   } else {
-    result = "🕯️ The Ritualist — You make violence an art, each drop a spell.";
+    archetype = "🕯️ The Ritualist — You make violence an art, each drop a spell.";
   }
 
   // Full profile object

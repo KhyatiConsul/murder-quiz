@@ -47,23 +47,32 @@ def health():
 
 @app.route("/api/init-db")
 def init_db():
-    """Run once after first deploy to create the table."""
     try:
         with db(commit=True) as cur:
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS quiz_responses (
-                    id        SERIAL PRIMARY KEY,
-                    name      TEXT NOT NULL,
-                    city      TEXT,
-                    birthyear INTEGER,
-                    nickname  TEXT,
-                    traits    JSONB,
+                    id          SERIAL PRIMARY KEY,
+                    name        TEXT,
+                    city        TEXT,
+                    birthyear   INTEGER,
+                    archetype   TEXT,
+                    grief       SMALLINT DEFAULT 0,
+                    rage        SMALLINT DEFAULT 0,
+                    control     SMALLINT DEFAULT 0,
+                    numb        SMALLINT DEFAULT 0,
+                    secrecy     SMALLINT DEFAULT 0,
+                    obsession   SMALLINT DEFAULT 0,
+                    compassion  SMALLINT DEFAULT 0,
+                    trauma      SMALLINT DEFAULT 0,
+                    envy        SMALLINT DEFAULT 0,
+                    chaos       SMALLINT DEFAULT 0,
+                    revenge     SMALLINT DEFAULT 0,
                     raw_answers JSONB,
-                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    timestamp   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
             cur.execute("CREATE INDEX IF NOT EXISTS idx_city      ON quiz_responses(city)")
-            cur.execute("CREATE INDEX IF NOT EXISTS idx_nickname  ON quiz_responses(nickname)")
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_archetype ON quiz_responses(archetype)")
             cur.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON quiz_responses(timestamp DESC)")
         return jsonify({"status": "ok", "message": "Table ready"})
     except Exception as e:
@@ -139,7 +148,6 @@ def view_data():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route("/api/stats")
 @app.route("/api/stats")
 def stats():
     if not check_auth():
