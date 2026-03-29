@@ -76,6 +76,7 @@ def save():
         return jsonify({"error": "name is required"}), 400
 
     raw = data.get("raw_answers", {})
+    t   = data.get("traits", {})
 
     birthyear = None
     if raw.get("birthyear"):
@@ -89,14 +90,33 @@ def save():
     try:
         with db(commit=True) as cur:
             cur.execute("""
-                INSERT INTO quiz_responses (name, city, birthyear, nickname, traits, raw_answers)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                INSERT INTO quiz_responses (
+                    name, city, birthyear, archetype,
+                    grief, rage, control, numb, secrecy, obsession,
+                    compassion, trauma, envy, chaos, revenge,
+                    raw_answers
+                ) VALUES (
+                    %s, %s, %s, %s,
+                    %s, %s, %s, %s, %s, %s,
+                    %s, %s, %s, %s, %s,
+                    %s
+                )
             """, (
-                data["name"][:100],
-                raw.get("city", "")[:100],
+                data.get("name", "")[:100],
+                data.get("city", raw.get("city", ""))[:100],
                 birthyear,
-                data.get("nickname", "")[:200],
-                json.dumps(data.get("traits", {})),
+                data.get("archetype", "")[:200],
+                t.get("grief", 0),
+                t.get("rage", 0),
+                t.get("control", 0),
+                t.get("numb", 0),
+                t.get("secrecy", 0),
+                t.get("obsession", 0),
+                t.get("compassion", 0),
+                t.get("trauma", 0),
+                t.get("envy", 0),
+                t.get("chaos", 0),
+                t.get("revenge", 0),
                 json.dumps(raw)
             ))
         return jsonify({"status": "ok"})
@@ -120,6 +140,7 @@ def view_data():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/stats")
+@app.route("/api/stats")
 def stats():
     if not check_auth():
         return jsonify({"error": "Unauthorized"}), 401
@@ -129,18 +150,37 @@ def stats():
             total = cur.fetchone()["n"]
 
             cur.execute("""
-                SELECT nickname, COUNT(*) as n FROM quiz_responses
-                WHERE nickname IS NOT NULL GROUP BY nickname ORDER BY n DESC
+                SELECT city,
+                    COUNT(*)                as responses,
+                    ROUND(AVG(grief),2)     as avg_grief,
+                    ROUND(AVG(rage),2)      as avg_rage,
+                    ROUND(AVG(control),2)   as avg_control,
+                    ROUND(AVG(numb),2)      as avg_numb,
+                    ROUND(AVG(secrecy),2)   as avg_secrecy,
+                    ROUND(AVG(trauma),2)    as avg_trauma,
+                    ROUND(AVG(envy),2)      as avg_envy,
+                    ROUND(AVG(chaos),2)     as avg_chaos,
+                    ROUND(AVG(obsession),2) as avg_obsession
+                FROM quiz_responses
+                WHERE city IS NOT NULL
+                GROUP BY city
+                ORDER BY responses DESC
+                LIMIT 20
             """)
-            by_archetype = {r["nickname"]: r["n"] for r in cur.fetchall()}
+            by_city = cur.fetchall()
 
             cur.execute("""
-                SELECT city, COUNT(*) as n FROM quiz_responses
-                WHERE city IS NOT NULL GROUP BY city ORDER BY n DESC LIMIT 20
+                SELECT archetype, COUNT(*) as n FROM quiz_responses
+                WHERE archetype IS NOT NULL
+                GROUP BY archetype ORDER BY n DESC
             """)
-            by_city = {r["city"]: r["n"] for r in cur.fetchall()}
+            by_archetype = {r["archetype"]: r["n"] for r in cur.fetchall()}
 
-        return jsonify({"total": total, "by_archetype": by_archetype, "by_city": by_city})
+        return jsonify({
+            "total": total,
+            "by_city": by_city,
+            "by_archetype": by_archetype
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

@@ -222,27 +222,26 @@ const archetypeTraits = {
   ]
 };
 
-const profile = {
-  name: answers.name,
-  nickname: result,
-  traits: archetypeTraits[result] || [],
-  raw_answers: answers
-};
-
-  // Send to Flask backend
+  const profile = {
+    name:        answers.name,
+    city:        answers.city,
+    archetype:   archetype,
+    traits:      traits,        // {grief:1, rage:2, control:3 ...} — stored as columns
+    raw_answers: answers        // full answers kept for reference
+  };
+ 
   fetch('/api/save', {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(profile)
   })
-  .then(response => response.json())
+  .then(r => r.json())
   .then(data => console.log("Saved:", data))
-  .catch(error => console.error("Error saving profile:", error));
-
+  .catch(err => console.error("Error saving:", err));
+ 
+  // Show result to user
   document.getElementById("quizForm").classList.add("hidden");
   const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = `<h2>Your Archetype:</h2><p><strong>${result}</strong></p>`;
+  resultDiv.innerHTML = `<h2>Your Archetype:</h2><p><strong>${archetype}</strong></p>`;
   resultDiv.classList.remove("hidden");
 });
