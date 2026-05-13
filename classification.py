@@ -54,3 +54,22 @@ def build_trait_features(data):
 x_full = build_trait_features(df)
 print(f"Total features (raw + parirwise diffs): {x_full.shape[1]}\n")
 
+# Train models
+
+def train_model(X, y, label):
+    rf = RandomForestClassifier(n_estimators = n_estimators,
+                                random_state = random_state, n_jobs=-1)
+    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=random_state)
+    cv_scores = cross_val_score(rf, X, y, cv=cv, scoring="accuracy")
+    X_tr, X_te, y_tr, y_te = train_test_split(
+        X,y, test_size=test_size, random_state=random_state, stratify=y)
+    rf.fit(X_tr, y_tr)
+    y_pred = rf.predict(X_te)
+    print(f"{label.upper()}")
+    print(f"5-Fold CV Accuracy: {cv_scores.mean():.3f} +- {cv_scores.std():.3f}\n")
+    print(f"Test Accuracy: {accuracy_score(y_te, y_pred):.3f}\n")
+    print(classification_report(y_te, y_pred))
+    return rf, X_te, y_te, y_pred
+
+rf_age, X_te_age, y_te_age, y_pred_age = train_model(x_full, df["age_group"], "Age Group")
+rf_city, X_te_city, y_te_city, y_pred_city = train_model(x_full, df["city"], "City")
