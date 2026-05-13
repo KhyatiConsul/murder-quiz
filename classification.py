@@ -43,3 +43,14 @@ df["age_group"] = pd.cut(df["age"], bins= bins, labels=labels).astype(str)
 print(f"Loaded {len(df)} rows")
 print("Age groups:", df["age_group"].value_counts().to_dict())
 print("Cities:", df["city"].value_counts().to_dict())
+
+#trait-comparison
+
+def build_trait_features(data):
+    feat_df = data[features].copy()
+    for a,b in combinations (features, 2):
+        feat_df[f"{a}_vs_{b}"] = data[a] - data[b]
+    return feat_df
+x_full = build_trait_features(df)
+print(f"Total features (raw + parirwise diffs): {x_full.shape[1]}\n")
+
