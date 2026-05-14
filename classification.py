@@ -186,3 +186,74 @@ def plot_confusion_matrix(y_true, y_pred, labels, title, cmap, filename):
  
 plot_confusion_matrix(y_te_age, y_pred_age, age_order, "Confusion Matrix — Age Group", 
                       "Greens", "age_confusion_matrix.png")
+
+# City Classification Visualisations
+
+city_order = sorted(df["city"].unique().tolist())
+city_means = df.groupby("city")[features].mean().loc[city_order]
+
+# 1. Heatmap
+fig, ax = plt.subplots(figsize=(13,7))
+data_norm_c=(city_means-city_means.min())/(city_means.max()-city_means.min())
+im2= ax.imshow(data_norm_c.values, cmap="Blues", aspect="auto", vmin=0, vmax=1)
+ax.set_x(range(len(features)))
+ax.set_xticklabels(features, rotation=35, ha="right", fontsize=11)
+ax.set_yticks(range(len(city_order)))
+ax.set_yticklabels(city_order, fontsize=11)
+
+for i in range (len(city_order)):
+    for j in range(len(features)):
+        v = city_means.values[i,j]
+        ax.text(j,i, f"{v:.1f}", ha="center", va="center",
+                fontsize=9, color="black", fontweight="bold")
+plt.colorbar(im2, ax=ax, label="Normalised Intensity")
+ax.set_title("Trait Dominance by City", fontsize=14, fontweight="bold", pad=12)
+plt.tight_layout()
+savefig("city_trait_heatmap.png")
+
+# 2. Top3 Traits per city (dot chart)
+fig, ax= plt.subplots(figsize=(12,7))
+for ci, city in enumerate(city_order):
+    row = city_means.loc[city].sort_values(ascending=False)
+    for rank, (trait, val) in enumerate(row.head(3).items()):
+        size = [220, 140, 80][rank]
+        alpha = [1.0, 0.70, 0.50][rank]
+        ax.scatter(features.index(trait), ci, s=size, color=palette_city[city], alpha= alpha, zorder=3)
+        ax.text(features.index(trait), ci+0.32, f"{val:.1f}", ha="center", fontsize=7.5, color="#333")
+    
+ax.set_xticks(range(len(features)))
+ax.set_xticklabels(features, fontsize=11, rotation=25, ha="right")
+ax.set_yticks(range(len(city_order)))
+ax.set_yticklabels(city_order, fontsize=11)
+ax.set_xlim(-0.6, len(features) - 0.4)
+ax.set_ylim(-0.8, len(city_order) - 0.3)
+ax.grid(alpha=0.2)
+ax.set_title("Top-3 Dominant Traits per City  (size = rank, label = mean score)",
+             fontsize=13, fontweight="bold")
+plt.tight_layout()
+savefig("city_top_traits_dot.png")
+
+# 3. City Radar
+fig, axes = plt.subplots(2,6, figsize=(22,8), subplot_kw=dict(polar=True))
+fig.suptitle("Emotional Trait Profiles- Cities", fontsize=15, fontweight="bold")
+axes=axes.flatten()
+
+for idx, city in enumerate(city_order):
+    ax= axes[idx]
+    vals= city_means.loc[city].values.tolist() + [city_means.loc[city].values[0]]
+    color= palette_city.get(city, "#888")
+    ax.plot(angles, vals, color=color, linewidth=2)
+    ax.fill(angles, vals, color=color, alpha=0.5)
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(features, size=7)
+    ax.set_ylim(0,4)
+    ax.set_yticks([1,2,3])
+    ax.set_yticklabels(["1", "2", "3"], size=6, color="grey")
+    ax.set_title(city, size=11, fontweight="bold", color=color, pad=10)
+    top_trait = city_means.loc[city].idxmax()
+    ax.annotate(f"{top_trait}", xy=(0.5, -0.12), xycoords="axes fraction",
+                ha="center", fontsize=8, color=color, fontstyle="italic")
+
+plt.tight_layout()
+savefig("city_radar_profiles.png")
+
